@@ -289,7 +289,6 @@ modeling}".}{Code of the analysis and processing of seismic data of the work ent
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}1}]:} \PY{k}{using} \PY{n}{PyPlot}
-        \PY{k}{using} \PY{n}{ExcelReaders}
         \PY{k}{using} \PY{n}{SAC}
         \PY{k}{using} \PY{n}{DSP}
 \end{Verbatim}
@@ -301,18 +300,24 @@ modeling}".}{Code of the analysis and processing of seismic data of the work ent
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ansi-cyan-intense}{\textbf{INFO: }}\textcolor{ansi-cyan}{Data are little-endian; byteswapping
+\textcolor{ansi-cyan-intense}{\textbf{Info: }}\textcolor{ansi-cyan}{Data are little-endian; byteswapping
 }
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{c}{\PYZsh{}Conversion to physical units. V(m/s)= count*1.164153nV/22.8V/(m/s)}
-        \PY{n}{pa}\PY{o}{.}\PY{n}{t} \PY{o}{=} \PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{o}{*}\PY{l+m+mf}{0.000000000051059342}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{rmean!}\PY{p}{(}\PY{n}{pa}\PY{p}{)}\PY{p}{;}
+        \PY{n}{rtrend!}\PY{p}{(}\PY{n}{pa}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{c}{\PYZsh{}Time vector}
+{\color{incolor}In [{\color{incolor}4}]:} \PY{c}{\PYZsh{}Conversion to physical units. V(m/s)= count*1.164153nV/22.8V/(m/s)}
+        \PY{n}{pa}\PY{o}{.}\PY{n}{t} \PY{o}{=} \PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{o}{*}\PY{p}{(}\PY{p}{(}\PY{l+m+mf}{1.1641e\PYZhy{}9}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{22.8}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{c}{\PYZsh{}Time vector}
         \PY{n}{ti} \PY{o}{=} \PY{n}{collect}\PY{p}{(}\PY{l+m+mi}{0}\PY{o}{:}\PY{n}{pa}\PY{o}{.}\PY{n}{npts}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{n}{pa}\PY{o}{.}\PY{n}{delta}\PY{p}{;}
         \PY{n}{n} \PY{o}{=} \PY{n}{convert}\PY{p}{(}\PY{k+kt}{Int32}\PY{p}{,}\PY{n}{floor}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{npts}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{;}
         \PY{n}{tp} \PY{o}{=} \PY{p}{(}\PY{k+kt}{DateTime}\PY{p}{(}\PY{l+m+mi}{2015}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{23}\PY{p}{,}\PY{l+m+mi}{21}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{:}\PY{p}{(}\PY{n}{Dates}\PY{o}{.}\PY{n}{Millisecond}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{4}\PY{o}{:}\PY{k+kt}{DateTime}\PY{p}{(}\PY{l+m+mi}{2015}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{24}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}\PY{p}{;}
@@ -320,64 +325,14 @@ modeling}".}{Code of the analysis and processing of seismic data of the work ent
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}5}]:} \PY{c}{\PYZsh{}Frequency vector}
+{\color{incolor}In [{\color{incolor}6}]:} \PY{c}{\PYZsh{}Frequency vector}
         \PY{n}{ds} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{/}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{delta}\PY{o}{*}\PY{n}{pa}\PY{o}{.}\PY{n}{npts}\PY{p}{)}\PY{p}{;}
         \PY{n}{f} \PY{o}{=} \PY{n}{collect}\PY{p}{(}\PY{l+m+mi}{0}\PY{o}{:}\PY{n}{pa}\PY{o}{.}\PY{n}{npts}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{n}{ds}\PY{p}{;}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{rmean!}\PY{p}{(}\PY{n}{pa}\PY{p}{)}\PY{p}{;}
-        \PY{n}{rtrend!}\PY{p}{(}\PY{n}{pa}\PY{p}{)}\PY{p}{;}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
-         \PY{n}{plot}\PY{p}{(}\PY{n}{tp}\PY{p}{,}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{o}{*}\PY{l+m+mi}{1000}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{[}\PY{l+s}{G}\PY{l+s}{M}\PY{l+s}{T}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-         \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-         \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-         \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{V}\PY{l+s}{e}\PY{l+s}{l}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{y}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{m}\PY{l+s}{m}\PY{l+s}{/}\PY{l+s}{s}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-         \PY{c}{\PYZsh{}PyPlot.savefig(\PYZdq{}time.png\PYZdq{},dpi=400)}
-\end{Verbatim}
-
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_7_0.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}21}]:} PyObject Text(25,0.5,'Velocity [mm/s]')
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}22}]:} \PY{n}{env} \PY{o}{=} \PY{n}{abs}\PY{o}{.}\PY{p}{(}\PY{n}{hilbert}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{;}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
-         \PY{n}{plot}\PY{p}{(}\PY{n}{tp}\PY{p}{,} \PY{n}{env}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{G}\PY{l+s}{M}\PY{l+s}{T}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-         \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{E}\PY{l+s}{n}\PY{l+s}{v}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{m}\PY{l+s}{\PYZca{}}\PY{l+s}{2}\PY{l+s}{/}\PY{l+s}{s}\PY{l+s}{\PYZca{}}\PY{l+s}{2}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_0.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}13}]:} ([-0.002, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012], PyCall.PyObject[PyObject Text(0,-0.002,'−0.002'), PyObject Text(0,0,'0.000'), PyObject Text(0,0.002,'0.002'), PyObject Text(0,0.004,'0.004'), PyObject Text(0,0.006,'0.006'), PyObject Text(0,0.008,'0.008'), PyObject Text(0,0.01,'0.010'), PyObject Text(0,0.012,'0.012')])
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{c}{\PYZsh{}Movil average function}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{c}{\PYZsh{}Movil average function}
          \PY{k}{function} \PY{n}{MA}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{n}\PY{p}{)}
              \PY{k}{if} \PY{n}{size}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{1}
                  \PY{n}{x} \PY{o}{=} \PY{n}{x}\PY{o}{\PYZsq{}}
@@ -397,36 +352,65 @@ modeling}".}{Code of the analysis and processing of seismic data of the work ent
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}23}]:} MA (generic function with 1 method)
+{\color{outcolor}Out[{\color{outcolor}13}]:} MA (generic function with 1 method)
 \end{Verbatim}
             
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{e\PYZus{}av} \PY{o}{=} \PY{n}{MA}\PY{p}{(}\PY{n}{env}\PY{p}{,}\PY{l+m+mi}{400}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+        \PY{n}{plot}\PY{p}{(}\PY{n}{tp}\PY{p}{,}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{o}{*}\PY{l+m+mi}{1000}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{[}\PY{l+s}{G}\PY{l+s}{M}\PY{l+s}{T}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+        \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+        \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+        \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{V}\PY{l+s}{e}\PY{l+s}{l}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{y}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{m}\PY{l+s}{m}\PY{l+s}{/}\PY{l+s}{s}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+        \PY{c}{\PYZsh{}PyPlot.savefig(\PYZdq{}time.png\PYZdq{},dpi=400)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_8_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:} PyObject Text(25,0.5,'Velocity [mm/s]')
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{env} \PY{o}{=} \PY{n}{abs}\PY{o}{.}\PY{p}{(}\PY{n}{hilbert}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ansi-yellow-intense}{\textbf{WARNING: }}\textcolor{ansi-yellow}{!(B::BitArray) is deprecated, use .!(B) instead.}
-Stacktrace:
- [1] \textbf{depwarn}\textbf{(}::String, ::Symbol\textbf{)} at \textbf{./deprecated.jl:70}
- [2] \textbf{!}\textbf{(}::BitArray\{2\}\textbf{)} at \textbf{./deprecated.jl:57}
- [3] \textbf{MA}\textbf{(}::Array\{Float32,1\}, ::Int64\textbf{)} at \textbf{./In[23]:13}
- [4] \textbf{include\_string}\textbf{(}::String, ::String\textbf{)} at \textbf{./loading.jl:522}
- [5] \textbf{include\_string}\textbf{(}::Module, ::String, ::String\textbf{)} at \textbf{/home/marv/.julia/v0.6/Compat/src/Compat.jl:71}
- [6] \textbf{execute\_request}\textbf{(}::ZMQ.Socket, ::IJulia.Msg\textbf{)} at \textbf{/home/marv/.julia/v0.6/IJulia/src/execute\_request.jl:158}
- [7] \textbf{(::Compat.\#inner\#17\{Array\{Any,1\},IJulia.\#execute\_request,Tuple\{ZMQ.Socket,IJulia.Msg\}\})}\textbf{(}\textbf{)} at \textbf{/home/marv/.julia/v0.6/Compat/src/Compat.jl:385}
- [8] \textbf{eventloop}\textbf{(}::ZMQ.Socket\textbf{)} at \textbf{/home/marv/.julia/v0.6/IJulia/src/eventloop.jl:8}
- [9] \textbf{(::IJulia.\#\#14\#17)}\textbf{(}\textbf{)} at \textbf{./task.jl:335}
-while loading In[24], in expression starting on line 1
-
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
-         \PY{n}{plot}\PY{p}{(}\PY{n}{tp}\PY{p}{,} \PY{n}{e\PYZus{}av}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plot}\PY{p}{(}\PY{n}{tp}\PY{p}{,} \PY{n}{env}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{G}\PY{l+s}{M}\PY{l+s}{T}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
          \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{E}\PY{l+s}{n}\PY{l+s}{v}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{m}\PY{l+s}{\PYZca{}}\PY{l+s}{2}\PY{l+s}{/}\PY{l+s}{s}\PY{l+s}{\PYZca{}}\PY{l+s}{2}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_10_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}13}]:} ([-0.002, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012], PyCall.PyObject[PyObject Text(0,-0.002,'−0.002'), PyObject Text(0,0,'0.000'), PyObject Text(0,0.002,'0.002'), PyObject Text(0,0.004,'0.004'), PyObject Text(0,0.006,'0.006'), PyObject Text(0,0.008,'0.008'), PyObject Text(0,0.01,'0.010'), PyObject Text(0,0.012,'0.012')])
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{b} \PY{o}{=} \PY{n}{ones}\PY{p}{(}\PY{l+m+mi}{15000}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{15000}\PY{p}{)}\PY{p}{;}
+         \PY{n}{env\PYZus{}1m} \PY{o}{=} \PY{n}{filt}\PY{p}{(}\PY{n}{b}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{env}\PY{p}{)}\PY{p}{;}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plot}\PY{p}{(}\PY{n}{ti}\PY{p}{,}\PY{p}{(}\PY{n}{abs}\PY{o}{.}\PY{p}{(}\PY{n}{env\PYZus{}1m}\PY{p}{)}\PY{p}{)}\PY{o}{.*}\PY{l+m+mi}{1000}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{k}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{ }\PY{l+s}{G}\PY{l+s}{M}\PY{l+s}{T}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+         \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{A}\PY{l+s}{m}\PY{l+s}{p}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
 \end{Verbatim}
 
@@ -437,11 +421,11 @@ while loading In[24], in expression starting on line 1
     { \hspace*{\fill} \\}
     
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}25}]:} ([-0.00025, 0.0, 0.00025, 0.0005, 0.00075, 0.001, 0.00125, 0.0015, 0.00175, 0.002], PyCall.PyObject[PyObject Text(0,-0.00025,'−0.00025'), PyObject Text(0,0,'0.00000'), PyObject Text(0,0.00025,'0.00025'), PyObject Text(0,0.0005,'0.00050'), PyObject Text(0,0.00075,'0.00075'), PyObject Text(0,0.001,'0.00100'), PyObject Text(0,0.00125,'0.00125'), PyObject Text(0,0.0015,'0.00150'), PyObject Text(0,0.00175,'0.00175'), PyObject Text(0,0.002,'0.00200')])
+{\color{outcolor}Out[{\color{outcolor}12}]:} ([-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8], PyCall.PyObject[PyObject Text(0,-0.1,'−0.1'), PyObject Text(0,0,'0.0'), PyObject Text(0,0.1,'0.1'), PyObject Text(0,0.2,'0.2'), PyObject Text(0,0.3,'0.3'), PyObject Text(0,0.4,'0.4'), PyObject Text(0,0.5,'0.5'), PyObject Text(0,0.6,'0.6'), PyObject Text(0,0.7,'0.7'), PyObject Text(0,0.8,'0.8')])
 \end{Verbatim}
             
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{c}{\PYZsh{}Butterworth filter}
+{\color{incolor}In [{\color{incolor}14}]:} \PY{c}{\PYZsh{}Butterworth filter}
          \PY{n}{resp} \PY{o}{=} \PY{n}{Bandpass}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,}\PY{l+m+mi}{124}\PY{p}{,}\PY{n}{fs}\PY{o}{=}\PY{l+m+mi}{250}\PY{p}{)}
          \PY{n}{desig} \PY{o}{=} \PY{n}{Butterworth}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
          \PY{n}{fil} \PY{o}{=} \PY{n}{filt}\PY{p}{(}\PY{n}{digitalfilter}\PY{p}{(}\PY{n}{resp}\PY{p}{,}\PY{n}{desig}\PY{p}{)}\PY{p}{,}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{p}{)}\PY{p}{;}
@@ -449,7 +433,7 @@ while loading In[24], in expression starting on line 1
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{specf} \PY{o}{=} \PY{n}{welch\PYZus{}pgram}\PY{p}{(}\PY{n}{fil}\PY{p}{,}\PY{n}{fs}\PY{o}{=}\PY{l+m+mi}{250}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{specf} \PY{o}{=} \PY{n}{welch\PYZus{}pgram}\PY{p}{(}\PY{n}{fil}\PY{p}{,}\PY{n}{fs}\PY{o}{=}\PY{l+m+mi}{250}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
 
@@ -471,7 +455,7 @@ while loading In[24], in expression starting on line 1
 \end{Verbatim}
             
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{av\PYZus{}spec} \PY{o}{=} \PY{n}{MA}\PY{p}{(}\PY{n}{specf}\PY{o}{.}\PY{n}{power}\PY{p}{,}\PY{l+m+mi}{400}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{av\PYZus{}spec} \PY{o}{=} \PY{n}{MA}\PY{p}{(}\PY{n}{specf}\PY{o}{.}\PY{n}{power}\PY{p}{,}\PY{l+m+mi}{400}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
 
@@ -487,7 +471,7 @@ Stacktrace:
  [7] \textbf{(::Compat.\#inner\#17\{Array\{Any,1\},IJulia.\#execute\_request,Tuple\{ZMQ.Socket,IJulia.Msg\}\})}\textbf{(}\textbf{)} at \textbf{/home/marv/.julia/v0.6/Compat/src/Compat.jl:385}
  [8] \textbf{eventloop}\textbf{(}::ZMQ.Socket\textbf{)} at \textbf{/home/marv/.julia/v0.6/IJulia/src/eventloop.jl:8}
  [9] \textbf{(::IJulia.\#\#14\#17)}\textbf{(}\textbf{)} at \textbf{./task.jl:335}
-while loading In[15], in expression starting on line 1
+while loading In[10], in expression starting on line 1
 
     \end{Verbatim}
 
@@ -515,13 +499,13 @@ while loading In[15], in expression starting on line 1
 \end{Verbatim}
             
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          \PY{n}{specgram}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{p}{,}\PY{l+m+mi}{125}\PY{p}{,}\PY{l+m+mi}{250}\PY{p}{,}\PY{n}{pad\PYZus{}to}\PY{o}{=}\PY{l+m+mi}{40}\PY{p}{,}\PY{n}{noverlap}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{)}\PY{p}{;}
          \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{[}\PY{l+s}{s}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
          \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{F}\PY{l+s}{r}\PY{l+s}{e}\PY{l+s}{q}\PY{l+s}{u}\PY{l+s}{e}\PY{l+s}{n}\PY{l+s}{c}\PY{l+s}{y}\PY{l+s}{[}\PY{l+s}{H}\PY{l+s}{z}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
-         \PY{n}{colorbar}\PY{p}{(}\PY{p}{)}
+         \PY{n}{PyPlot}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{s}\PY{l+s}{p}\PY{l+s}{e}\PY{l+s}{c}\PY{l+s}{.}\PY{l+s}{p}\PY{l+s}{n}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{300}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -530,8 +514,63 @@ while loading In[15], in expression starting on line 1
     \end{center}
     { \hspace*{\fill} \\}
     
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+         \PY{n}{sp} \PY{o}{=} \PY{n}{specgram}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{p}{,}\PY{l+m+mi}{125}\PY{p}{,}\PY{l+m+mi}{250}\PY{p}{,}\PY{n}{pad\PYZus{}to}\PY{o}{=}\PY{l+m+mi}{40}\PY{p}{,}\PY{n}{noverlap}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{)}\PY{p}{;}
+         \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{[}\PY{l+s}{s}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+         \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{F}\PY{l+s}{r}\PY{l+s}{e}\PY{l+s}{q}\PY{l+s}{u}\PY{l+s}{e}\PY{l+s}{n}\PY{l+s}{c}\PY{l+s}{y}\PY{l+s}{[}\PY{l+s}{H}\PY{l+s}{z}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        UndefVarError: heatmap not defined
+
+        
+
+        Stacktrace:
+
+         [1] include\_string(::String, ::String) at ./loading.jl:522
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}40}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{c}{\PYZsh{}fig = figure(figsize=(10,3))}
+         \PY{n}{plot}\PY{p}{(}\PY{n}{tp}\PY{p}{,}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{o}{*}\PY{l+m+mi}{1000}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{V}\PY{l+s}{e}\PY{l+s}{l}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{y}\PY{l+s}{ }\PY{l+s}{[}\PY{l+s}{m}\PY{l+s}{m}\PY{l+s}{/}\PY{l+s}{s}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{11}\PY{p}{)}
+         \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{11}\PY{p}{)}
+         \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{ }\PY{l+s}{G}\PY{l+s}{M}\PY{l+s}{T}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+         \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+         \PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
+         \PY{c}{\PYZsh{}fig = figure(figsize=(10,5))}
+         \PY{n}{plot}\PY{p}{(}\PY{n}{av\PYZus{}spec}\PY{o}{.*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{specf}\PY{o}{.}\PY{n}{freq}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{g}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{c}{\PYZsh{}axis(\PYZdq{}tight\PYZdq{})}
+         \PY{c}{\PYZsh{}ax=gca()}
+         \PY{c}{\PYZsh{}ax[:spines][\PYZdq{}left\PYZdq{}][:set\PYZus{}position](\PYZdq{}center\PYZdq{})}
+         \PY{c}{\PYZsh{}xlabel(\PYZdq{}Frecuencia[Hz]\PYZdq{})}
+         \PY{c}{\PYZsh{}ylabel(\PYZdq{}PSD\PYZdq{})}
+         \PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{)}
+         \PY{c}{\PYZsh{}fig = figure(figsize=(10,5))}
+         \PY{n}{specgram}\PY{p}{(}\PY{n}{pa}\PY{o}{.}\PY{n}{t}\PY{p}{,}\PY{l+m+mi}{125}\PY{p}{,}\PY{l+m+mi}{250}\PY{p}{,}\PY{n}{pad\PYZus{}to}\PY{o}{=}\PY{l+m+mi}{40}\PY{p}{,}\PY{n}{noverlap}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{)}\PY{p}{;}
+         \PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{T}\PY{l+s}{i}\PY{l+s}{m}\PY{l+s}{e}\PY{l+s}{[}\PY{l+s}{s}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{xticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{11}\PY{p}{)}
+         \PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{F}\PY{l+s}{r}\PY{l+s}{e}\PY{l+s}{q}\PY{l+s}{u}\PY{l+s}{e}\PY{l+s}{n}\PY{l+s}{c}\PY{l+s}{y}\PY{l+s}{[}\PY{l+s}{H}\PY{l+s}{z}\PY{l+s}{]}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{11}\PY{p}{)}
+         \PY{n}{yticks}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{11}\PY{p}{)}
+         \PY{n}{colorbar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} PyObject <matplotlib.colorbar.Colorbar object at 0x7f7f533df4e0>
+{\color{outcolor}Out[{\color{outcolor}40}]:} PyObject <matplotlib.colorbar.Colorbar object at 0x7f1d3954b198>
 \end{Verbatim}
             
 
